@@ -1,4 +1,6 @@
 using assasment_task_backend.Models;
+using assasment_task_backend.Services;
+using assasment_task_backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+builder.Services.AddScoped<IItemService,ItemService>();
 
 var app = builder.Build();
 
