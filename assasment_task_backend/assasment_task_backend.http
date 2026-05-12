@@ -1,0 +1,6 @@
+@assasment_task_backend_HostAddress = http://localhost:5041
+
+GET {{assasment_task_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
