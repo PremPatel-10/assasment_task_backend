@@ -27,6 +27,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IItemService,ItemService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 

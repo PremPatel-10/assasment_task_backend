@@ -5,24 +5,23 @@ namespace assasment_task_backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ItemController : Controller
+    public class OrderController : Controller
     {
-        private readonly IItemService itemService;
+        private readonly IOrderService orderService;
 
-        public ItemController(IItemService itemService)
+        public OrderController(IOrderService orderService)
         {
-            this.itemService = itemService;
+            this.orderService = orderService;
         }
-
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet("allItems")]
-        public async Task<IActionResult> GetAllItems() 
+        [HttpGet("allOrder")]
+        public async Task<IActionResult> GetAllOrder()
         {
-            var record = await itemService.GetAllItem();
+            var record = await orderService.GetAllOrder();
 
             if (record == null)
             {
