@@ -9,5 +9,7 @@ namespace assasment_task_backend.Services.Interfaces
         //public Task<List<Item>> SerchItemMany(string itemName);
         public Task<List<Item>> Search(string itemName);
         public Task<Item> AddItem(Item item);
+        public Task<Item> EditItem(int id, Item item);
+        public Task<bool> IsDelete(int id);
     }
 }

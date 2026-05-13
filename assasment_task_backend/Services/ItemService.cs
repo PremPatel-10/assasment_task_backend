@@ -53,5 +53,36 @@ namespace assasment_task_backend.Services
             return item;
         }
 
+        public async Task<Item> EditItem(int id,Item item)
+        {
+            var record = await context.Items.FindAsync(id);
+
+            if (record == null)
+            {
+                throw new Exception("Data Doesn't Exist");
+            }
+
+            record.ItemName = item.ItemName;
+            record.ItemCode = item.ItemCode;
+
+            await context.SaveChangesAsync();
+
+            return item;
+        }
+
+        public async Task<bool> IsDelete(int id)
+        {
+            var record = await context.Items.FindAsync(id);
+
+            if (record == null)
+            {
+                return false;
+            }
+
+            context.Items.Remove(record);
+            await context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

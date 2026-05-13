@@ -21,7 +21,7 @@ namespace assasment_task_backend.Controllers
         }
 
         [HttpGet("allItems")]
-        public async Task<IActionResult> GetAllItems() 
+        public async Task<IActionResult> GetAllItems()
         {
             var record = await itemService.GetAllItem();
 
@@ -55,9 +55,37 @@ namespace assasment_task_backend.Controllers
 
                 return Ok(item);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateItem(int id, [FromBody] Item item)
+        {
+            try
+            {
+                await itemService.EditItem(id, item);
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
+        {
+            var record = await itemService.IsDelete(id);
+
+            if (record)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { message = "Item deleted successfully" });
         }
     }
 }
