@@ -17,18 +17,5 @@ namespace assasment_task_backend.Controllers
         {
             return View();
         }
-
-        [HttpGet("allOrder")]
-        public async Task<IActionResult> GetAllOrder()
-        {
-            var record = await orderService.GetAllOrder();
-
-            if (record == null)
-            {
-                return NotFound("Data Not Found");
-            }
-
-            return Ok(record);
-        }
     }
 }

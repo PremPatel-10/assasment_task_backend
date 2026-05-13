@@ -1,4 +1,5 @@
-﻿using assasment_task_backend.Services.Interfaces;
+﻿using assasment_task_backend.Models;
+using assasment_task_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace assasment_task_backend.Controllers
@@ -30,6 +31,33 @@ namespace assasment_task_backend.Controllers
             }
 
             return Ok(record);
+        }
+
+        [HttpGet("search/{item}")]
+        public async Task<IActionResult> Search(string item)
+        {
+            var record = await itemService.Search(item);
+
+            if (record == null)
+            {
+                return NotFound("No data Found in records");
+            }
+
+            return Ok(record);
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> InsertItem([FromBody] Item item)
+        {
+            try
+            {
+                await itemService.AddItem(item);
+
+                return Ok(item);
+            }
+            catch (Exception ex) {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
