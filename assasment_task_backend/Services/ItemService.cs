@@ -18,6 +18,18 @@ namespace assasment_task_backend.Services
             return await context.Items.ToListAsync();
         }
 
+        public async Task<Item> GetItemById(int id)
+        {
+            var record = await context.Items.FindAsync(id);
+
+            if (record == null)
+            {
+                throw new Exception("No Data Found");
+            }
+
+            return record;
+        }
+
         //public async Task<Item?> SerchItemSingle(string itemName)
         //{
         //    return await context.Items.FirstOrDefaultAsync(i => i.ItemName == itemName);

@@ -33,6 +33,14 @@ namespace assasment_task_backend.Controllers
             return Ok(record);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetItemById(int id)
+        {
+            var record = await itemService.GetItemById(id);
+
+            return Ok(record);
+        }
+
         [HttpGet("search/{item}")]
         public async Task<IActionResult> Search(string item)
         {
