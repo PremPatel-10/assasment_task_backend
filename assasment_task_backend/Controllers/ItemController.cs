@@ -65,7 +65,7 @@ namespace assasment_task_backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -79,19 +79,14 @@ namespace assasment_task_backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteItem(int id)
+        public  IActionResult DeleteItem(int id)
         {
-            var record = await itemService.IsDelete(id);
-
-            if (record)
-            {
-                return NotFound();
-            }
+            itemService.IsDelete(id);
 
             return Ok(new { message = "Item deleted successfully" });
         }

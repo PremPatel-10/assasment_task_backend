@@ -79,22 +79,15 @@ namespace assasment_task_backend.Services
 
             await context.SaveChangesAsync();
 
-            return item;
+            return record;
         }
 
-        public async Task<bool> IsDelete(int id)
+        public void IsDelete(int id)
         {
-            var record = await context.Items.FindAsync(id);
+            var record = context.Items.Find(id);
 
-            if (record == null)
-            {
-                return false;
-            }
-
-            context.Items.Remove(record);
-            await context.SaveChangesAsync();
-
-            return true;
+            context.Items.Remove(record!);
+            context.SaveChanges();
         }
     }
 }
