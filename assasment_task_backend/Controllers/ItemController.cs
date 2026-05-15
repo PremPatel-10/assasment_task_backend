@@ -84,11 +84,19 @@ namespace assasment_task_backend.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public  IActionResult DeleteItem(int id)
+        public IActionResult DeleteItem(int id)
         {
             itemService.IsDelete(id);
 
             return Ok(new { message = "Item deleted successfully" });
+        }
+
+        [HttpGet("pages/{noOfPages}/{pageSize}")]
+        public async Task<IActionResult> Pagination(int noOfPages,int pageSize)
+        {
+            var record = await itemService.Pagination(noOfPages, pageSize);
+
+            return Ok(record);
         }
     }
 }

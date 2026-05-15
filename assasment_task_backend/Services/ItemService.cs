@@ -42,7 +42,7 @@ namespace assasment_task_backend.Services
 
         public async Task<List<Item>> Search(string itemName)
         {
-            var items = await context.Items.Where(i => i.ItemName == itemName).ToListAsync();
+            var items = await context.Items.Where(i => i.ItemName.Contains(itemName)).ToListAsync();
 
             if (items.Count == 1)
             {
@@ -65,7 +65,7 @@ namespace assasment_task_backend.Services
             return item;
         }
 
-        public async Task<Item> EditItem(int id,Item item)
+        public async Task<Item> EditItem(int id, Item item)
         {
             var record = await context.Items.FindAsync(id);
 
@@ -86,8 +86,21 @@ namespace assasment_task_backend.Services
         {
             var record = context.Items.Find(id);
 
-            context.Items.Remove(record!);
+            context.Items.Remove(record);
             context.SaveChanges();
+        }
+
+        public async Task<List<Item>> Pagination(int page, int pageSize)
+        {
+            var totalItems = await context.Items.CountAsync();
+            var totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
+
+            var itemPerPage = await context.Items
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return itemPerPage;
         }
     }
 }

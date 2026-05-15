@@ -12,5 +12,6 @@ namespace assasment_task_backend.Services.Interfaces
         public Task<Item> AddItem(Item item);
         public Task<Item> EditItem(int id, Item item);
         public void IsDelete(int id);
+        public Task<List<Item>> Pagination(int page = 1, int pageSize = 10);
     }
 }
