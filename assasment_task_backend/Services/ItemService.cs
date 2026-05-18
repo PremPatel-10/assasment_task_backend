@@ -86,7 +86,7 @@ namespace assasment_task_backend.Services
         {
             var record = context.Items.Find(id);
 
-            context.Items.Remove(record);
+            context.Items.Remove(record!);
             context.SaveChanges();
         }
 
