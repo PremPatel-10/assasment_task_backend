@@ -28,7 +28,7 @@ namespace assasment_task_backend.Controllers
             return Ok(record);
         }
 
-        [HttpGet("search/{vender}")]
+        [HttpGet("search/{venderName}")]
         public async Task<IActionResult> Search(string venderName)
         {
             var record = await orderService.Search(venderName);
