@@ -68,12 +68,12 @@ namespace assasment_task_backend.Services
             return record;
         }
 
-        public async void IsDelete(int id)
+        public void IsDelete(int id)
         {
-            var record = await context.Orders.FindAsync(id);
+            var record = context.Orders.Find(id);
 
             context.Orders.Remove(record!);
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public async Task<List<Order>> Pagination(int page, int pageSize)
