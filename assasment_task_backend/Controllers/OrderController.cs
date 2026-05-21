@@ -20,6 +20,19 @@ namespace assasment_task_backend.Controllers
             return View();
         }
 
+        [HttpGet("allOrder")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var record = await orderService.GetAllOrder();
+
+            if (record == null)
+            {
+                return NotFound("Data Not Found");
+            }
+
+            return Ok(record);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {

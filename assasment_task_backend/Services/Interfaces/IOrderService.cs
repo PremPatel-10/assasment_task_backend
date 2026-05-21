@@ -4,6 +4,7 @@ namespace assasment_task_backend.Services.Interfaces
 {
     public interface IOrderService
     {
+        public Task<List<Order>> GetAllOrder();
         public Task<Order> GetOrderById(int id);
         public Task<List<Order>> Search(string venderName);
         public Task<Order> AddOrder(Order order);

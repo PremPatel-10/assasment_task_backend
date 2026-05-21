@@ -13,6 +13,11 @@ namespace assasment_task_backend.Services
             this.context = context;
         }
 
+        public async Task<List<Order>> GetAllOrder()
+        {
+            return await context.Orders.ToListAsync();
+        }
+
         public async Task<Order> GetOrderById(int id)
         {
             var record = await context.Orders.FindAsync(id);
