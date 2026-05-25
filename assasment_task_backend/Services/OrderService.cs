@@ -77,15 +77,17 @@ namespace assasment_task_backend.Services
         {
             var record = context.Orders.Find(id);
 
+            if(record == null)
+            {
+                throw new Exception("Record Not Found");
+            }
+
             context.Orders.Remove(record!);
             context.SaveChanges();
         }
 
         public async Task<List<Order>> Pagination(int page, int pageSize)
         {
-            var totalItems = await context.Orders.CountAsync();
-            var totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
-
             var itemPerPage = await context.Orders
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
