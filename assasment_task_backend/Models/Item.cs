@@ -10,4 +10,6 @@ public partial class Item
     public string ItemName { get; set; } = null!;
 
     public int ItemCode { get; set; }
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

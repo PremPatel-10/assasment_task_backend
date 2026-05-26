@@ -34,11 +34,6 @@ namespace assasment_task_backend.Services
         {
             var orders = await context.Orders.Where(o => o.VendorName.Contains(venderName)).ToListAsync();
 
-            if (orders.Count == 1)
-            {
-                orders.FirstOrDefault();
-            }
-
             return orders;
         }
 

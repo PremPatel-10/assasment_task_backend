@@ -14,4 +14,6 @@ public partial class Order
     public DateOnly? OrderDate { get; set; }
 
     public int? OrderTotal { get; set; }
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

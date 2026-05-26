@@ -19,6 +19,8 @@ public partial class InventoryContext : DbContext
 
     public virtual DbSet<Order> Orders { get; set; }
 
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Item>(entity =>
@@ -43,6 +45,25 @@ public partial class InventoryContext : DbContext
             entity.Property(e => e.VendorName)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__OrderDet__D3B9D36C4721AE63");
+
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Total)
+                .HasComputedColumnSql("([Price]*[Quantity])", false)
+                .HasColumnType("decimal(21, 2)");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("FK__OrderDeta__ItemI__6E01572D");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK__OrderDeta__Order__6EF57B66");
         });
 
         OnModelCreatingPartial(modelBuilder);

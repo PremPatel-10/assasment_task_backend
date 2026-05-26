@@ -97,9 +97,6 @@ namespace assasment_task_backend.Services
 
         public async Task<List<Item>> Pagination(int page, int pageSize)
         {
-            var totalItems = await context.Items.CountAsync();
-            var totalPages = (int)Math.Ceiling((decimal)totalItems / pageSize);
-
             var itemPerPage = await context.Items
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
