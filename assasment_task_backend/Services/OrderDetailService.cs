@@ -20,36 +20,7 @@ namespace assasment_task_backend.Services
 
         public async Task<OrderDetail> GetByOrderId(int id)
         {
-            var record = await (from d in context.OrderDetails
-                                where d.OrderId == id
-                                select new OrderDetail
-                                {
-                                    OrderDetailId = d.OrderDetailId,
-                                    OrderId = d.OrderId,
-                                    ItemId = d.ItemId,
-                                    Price = d.Price,
-                                    Quantity = d.Quantity,
-                                    Total = d.Total,
-                                    Item = new Item
-                                    {
-                                        ItemId = (int)d.ItemId!,
-                                        ItemName = d.Item!.ItemName,
-                                        ItemCode = d.Item.ItemCode
-                                    },
-                                    Order = new Order
-                                    {
-                                        OrderId = id,
-                                        OrderNumber = d.Order!.OrderNumber,
-                                        VendorName = d.Order.VendorName,
-                                        OrderDate = d.Order.OrderDate,
-                                        OrderTotal = d.Order.OrderTotal
-                                    }
-                                }).FirstOrDefaultAsync();
-
-            if (record == null)
-            {
-                throw new Exception("Record not found");
-            }
+            var record = await context.OrderDetails.Where(o => o.OrderId == id).FirstOrDefaultAsync();
 
             return record;
         }
@@ -69,11 +40,8 @@ namespace assasment_task_backend.Services
 
         public async Task<OrderDetail> UpdateDetails(int id, OrderDetail orderInfo)
         {
+
             var record = await context.OrderDetails.FindAsync(id);
-            if (record == null)
-            {
-                throw new Exception("Record not Found");
-            }
 
             record.OrderId = orderInfo.OrderId;
             record.ItemId = orderInfo.ItemId;

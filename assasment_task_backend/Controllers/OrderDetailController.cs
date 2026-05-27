@@ -32,6 +32,11 @@ namespace assasment_task_backend.Controllers
         {
             var details = await orderDetailService.GetByOrderId(id);
 
+            if (details == null)
+            {
+                return NotFound("Data Not Exist");
+            }
+
             return Ok(details);
         }
 
@@ -56,6 +61,11 @@ namespace assasment_task_backend.Controllers
             try
             {
                 var record = await orderDetailService.UpdateDetails(id, details);
+
+                if(record == null)
+                {
+                    return NotFound("Record Not Found");
+                }
 
                 return Ok(record);
             }
