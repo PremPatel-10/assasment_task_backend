@@ -20,14 +20,38 @@ namespace assasment_task_backend.Services
 
         public async Task<OrderDetail> GetByOrderId(int id)
         {
-            var records = await context.OrderDetails.FirstOrDefaultAsync(d => d.OrderId == id);
+            var record = await (from d in context.OrderDetails
+                                where d.OrderId == id
+                                select new OrderDetail
+                                {
+                                    OrderDetailId = d.OrderDetailId,
+                                    OrderId = d.OrderId,
+                                    ItemId = d.ItemId,
+                                    Price = d.Price,
+                                    Quantity = d.Quantity,
+                                    Total = d.Total,
+                                    Item = new Item
+                                    {
+                                        ItemId = (int)d.ItemId!,
+                                        ItemName = d.Item!.ItemName,
+                                        ItemCode = d.Item.ItemCode
+                                    },
+                                    Order = new Order
+                                    {
+                                        OrderId = id,
+                                        OrderNumber = d.Order!.OrderNumber,
+                                        VendorName = d.Order.VendorName,
+                                        OrderDate = d.Order.OrderDate,
+                                        OrderTotal = d.Order.OrderTotal
+                                    }
+                                }).FirstOrDefaultAsync();
 
-            if (records == null)
+            if (record == null)
             {
                 throw new Exception("Record not found");
             }
 
-            return records;
+            return record;
         }
 
         public async Task<OrderDetail> InsertDetails(OrderDetail orderInfo)
