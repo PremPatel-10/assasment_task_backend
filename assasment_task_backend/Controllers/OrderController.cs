@@ -1,6 +1,7 @@
 ﻿using assasment_task_backend.Models;
 using assasment_task_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace assasment_task_backend.Controllers
 {
@@ -9,10 +10,12 @@ namespace assasment_task_backend.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
+        private readonly InventoryContext context;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, InventoryContext context)
         {
             this.orderService = orderService;
+            this.context = context;
         }
         public IActionResult Index()
         {
@@ -93,7 +96,10 @@ namespace assasment_task_backend.Controllers
         [HttpGet("pages/{noOfPages}/{pageSize}")]
         public async Task<IActionResult> Pagination(int noOfPages, int pageSize)
         {
-            var record = await orderService.Pagination(noOfPages, pageSize);
+            var record = await context.Orders
+                .Skip((noOfPages - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(); ;
 
             return Ok(record);
         }

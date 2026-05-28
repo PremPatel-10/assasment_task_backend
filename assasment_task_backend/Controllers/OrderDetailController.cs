@@ -1,6 +1,6 @@
 ﻿using assasment_task_backend.Models;
-using assasment_task_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace assasment_task_backend.Controllers
 {
@@ -8,11 +8,11 @@ namespace assasment_task_backend.Controllers
     [Route("orderDetail")]
     public class OrderDetailController : Controller
     {
-        private readonly IOrderDetailService orderDetailService;
+        private readonly InventoryContext context;
 
-        public OrderDetailController(IOrderDetailService orderDetailService)
+        public OrderDetailController(InventoryContext context)
         {
-            this.orderDetailService = orderDetailService;
+            this.context = context;
         }
         public IActionResult Index()
         {
@@ -22,7 +22,7 @@ namespace assasment_task_backend.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetDetails()
         {
-            var details = await orderDetailService.GetAllDetails();
+            var details = await context.OrderDetails.ToListAsync();
 
             return Ok(details);
         }
@@ -30,7 +30,7 @@ namespace assasment_task_backend.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> GetDetailsByOrderID(int id)
         {
-            var details = await orderDetailService.GetByOrderId(id);
+            var details = await context.OrderDetails.Where(o => o.OrderId == id).FirstOrDefaultAsync();
 
             if (details == null)
             {
@@ -45,7 +45,13 @@ namespace assasment_task_backend.Controllers
         {
             try
             {
-                var record = await orderDetailService.InsertDetails(details);
+                if (details == null)
+                {
+                    return NotFound("Details Not found");
+                }
+
+                var record = await context.OrderDetails.AddAsync(details);
+                await context.SaveChangesAsync();
 
                 return Ok(record);
             }
@@ -60,26 +66,49 @@ namespace assasment_task_backend.Controllers
         {
             try
             {
-                var record = await orderDetailService.UpdateDetails(id, details);
+                var record = await context.OrderDetails.FindAsync(id);
 
                 if (record == null)
                 {
                     return NotFound("Record Not Found");
                 }
 
+                record.OrderId = details.OrderId;
+                record.ItemId = details.ItemId;
+                record.Price = details.Price;
+                record.Quantity = details.Quantity;
+
+                await context.SaveChangesAsync();
+
                 return Ok(record);
             }
             catch (Exception e)
             {
-                return NotFound(e.Message);
+                return BadRequest(e.Message);
             }
         }
 
         [HttpPost("bulk")]
         public async Task<IActionResult> AddBulkDetails(List<OrderDetail> details)
         {
-            await orderDetailService.AddBulkDetails(details);
-            return Ok();
+            try
+            {
+                if (details == null)
+                {
+                    return NotFound("Details not Found");
+                }
+                foreach (var item in details)
+                {
+                    context.OrderDetails.Add(item);
+                }
+
+                await context.SaveChangesAsync();
+                return Ok(details);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

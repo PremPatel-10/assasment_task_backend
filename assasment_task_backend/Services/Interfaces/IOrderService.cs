@@ -10,6 +10,5 @@ namespace assasment_task_backend.Services.Interfaces
         public Task<Order> AddOrder(Order order);
         public Task<Order> EditOrder(int id, Order order);
         public void IsDelete(int id);
-        public Task<List<Order>> Pagination(int page = 1, int pageSize = 5);
     }
 }

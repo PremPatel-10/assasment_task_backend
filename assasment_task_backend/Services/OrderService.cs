@@ -80,15 +80,5 @@ namespace assasment_task_backend.Services
             context.Orders.Remove(record!);
             context.SaveChanges();
         }
-
-        public async Task<List<Order>> Pagination(int page, int pageSize)
-        {
-            var itemPerPage = await context.Orders
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            return itemPerPage;
-        }
     }
 }
