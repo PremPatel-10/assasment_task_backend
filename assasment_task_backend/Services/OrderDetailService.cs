@@ -22,6 +22,11 @@ namespace assasment_task_backend.Services
         {
             var record = await context.OrderDetails.Where(o => o.OrderId == id).FirstOrDefaultAsync();
 
+            if (record == null)
+            {
+                throw new Exception("Record Not Found");
+            }
+
             return record;
         }
 
@@ -38,19 +43,38 @@ namespace assasment_task_backend.Services
             return orderInfo;
         }
 
-        public async Task<OrderDetail> UpdateDetails(int id, OrderDetail orderInfo)
+        public async Task<OrderDetail> UpdateDetails(int id, OrderDetail details)
         {
-
             var record = await context.OrderDetails.FindAsync(id);
 
-            record.OrderId = orderInfo.OrderId;
-            record.ItemId = orderInfo.ItemId;
-            record.Price = orderInfo.Price;
-            record.Quantity = orderInfo.Quantity;
+            if (record == null)
+            {
+                throw new Exception("Details Not Found");
+            }
+
+            record.OrderId = details.OrderId;
+            record.ItemId = details.ItemId;
+            record.Price = details.Price;
+            record.Quantity = details.Quantity;
 
             await context.SaveChangesAsync();
 
             return record;
+        }
+        public async Task AddBulkDetails(List<OrderDetail> details)
+        {
+            foreach (var item in details)
+            {
+                context.OrderDetails.Add(item);
+            }
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -62,7 +62,7 @@ namespace assasment_task_backend.Controllers
             {
                 var record = await orderDetailService.UpdateDetails(id, details);
 
-                if(record == null)
+                if (record == null)
                 {
                     return NotFound("Record Not Found");
                 }
@@ -73,6 +73,13 @@ namespace assasment_task_backend.Controllers
             {
                 return NotFound(e.Message);
             }
+        }
+
+        [HttpPost("bulk")]
+        public async Task<IActionResult> AddBulkDetails(List<OrderDetail> details)
+        {
+            await orderDetailService.AddBulkDetails(details);
+            return Ok();
         }
     }
 }
