@@ -88,6 +88,19 @@ namespace assasment_task_backend.Controllers
             }
         }
 
+        [HttpGet("getBulk/{id}")]
+        public async Task<IActionResult> GetBulkDetails(int id)
+        {
+            var record = await context.OrderDetails.Where(d => d.OrderId == id).ToListAsync();
+
+            if (!record.Any())
+            {
+                return NotFound("Record not found");
+            }
+
+            return Ok(record);
+        }
+
         [HttpPost("bulk")]
         public async Task<IActionResult> AddBulkDetails(List<OrderDetail> details)
         {
@@ -107,7 +120,7 @@ namespace assasment_task_backend.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
