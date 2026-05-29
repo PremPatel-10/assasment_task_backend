@@ -93,11 +93,6 @@ namespace assasment_task_backend.Controllers
         {
             var record = await context.OrderDetails.Where(d => d.OrderId == id).ToListAsync();
 
-            if (!record.Any())
-            {
-                return NotFound("Record not found");
-            }
-
             return Ok(record);
         }
 
@@ -110,12 +105,49 @@ namespace assasment_task_backend.Controllers
                 {
                     return NotFound("Details not Found");
                 }
+
                 foreach (var item in details)
                 {
+                    item.Total = item.Price * item.Quantity;
                     context.OrderDetails.Add(item);
                 }
 
                 await context.SaveChangesAsync();
+                return Ok(details);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("editBulk/{orderId}")]
+        public async Task<IActionResult> UpdateBulkDetails(int orderId, [FromBody] List<OrderDetail> details)
+        {
+            try
+            {
+                var existingDetails = await context.OrderDetails.Where(d => d.OrderId == orderId).ToListAsync();
+
+                context.OrderDetails.RemoveRange(existingDetails);
+
+                await context.SaveChangesAsync();
+
+                foreach (var item in details)
+                {
+                    var newDetail = new OrderDetail
+                    {
+                        OrderId = orderId,
+                        ItemId = item.ItemId,
+                        Price = item.Price,
+                        Quantity = item.Quantity,
+                        Total = item.Price * item.Quantity
+                    };
+
+                    context.OrderDetails.Add(newDetail);
+                }
+
+                await context.SaveChangesAsync();
+
                 return Ok(details);
             }
             catch (Exception ex)
