@@ -70,14 +70,24 @@ namespace assasment_task_backend.Services
 
         public void IsDelete(int id)
         {
+            // changes done because of child table using this records so deleted them first then deleted
             var record = context.Orders.Find(id);
 
-            if(record == null)
+            if (record == null)
             {
                 throw new Exception("Record Not Found");
             }
 
-            context.Orders.Remove(record!);
+            // delete order details first
+            var details = context.OrderDetails
+                .Where(d => d.OrderId == id)
+                .ToList();
+
+            context.OrderDetails.RemoveRange(details);
+
+            // then delete order
+            context.Orders.Remove(record);
+
             context.SaveChanges();
         }
     }
