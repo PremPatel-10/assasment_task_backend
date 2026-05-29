@@ -30,7 +30,7 @@ namespace assasment_task_backend.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> GetDetailsByOrderID(int id)
         {
-            var details = await context.OrderDetails.Where(o => o.OrderId == id).FirstOrDefaultAsync();
+            var details = context.OrderDetails.Where(o => o.OrderId == id);
 
             if (details == null)
             {
